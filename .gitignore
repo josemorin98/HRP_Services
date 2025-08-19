@@ -1,0 +1,32 @@
+# .gitignore para proyectos Python
+__pycache__/
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+.env/
+.venv/
+ENV/
+venv/
+.envrc
+.env.*
+*.env
+*.log
+*.sqlite3
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.bak
+*.tmp
+*.orig
+*.coverage
+htmlcov/
+.tox/
+.pytest_cache/
+.mypy_cache/
+.cache/
+
+# Archivos de configuración de VSCode
+.vscode/

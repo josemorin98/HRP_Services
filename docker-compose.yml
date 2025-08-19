@@ -1,0 +1,34 @@
+version: '3.8'
+services:
+  mongo:
+    image: mongo:latest
+    hostname: mongoDB
+    container_name: mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: apihrp
+      MONGO_INITDB_ROOT_PASSWORD: apihrpservice
+    volumes:
+      - mongo_data:/data/db
+
+  ingressapi:
+    build:
+      context: ./src/IngressApi
+      dockerfile: Dockerfile
+    container_name: ingressapi
+    restart: always
+    ports:
+      - "8001:8000"
+    depends_on:
+      - mongo
+    environment:
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ./src/Tools:/app/Tools
+      - ./data:/app/data
+      - ./test:/app/test
+
+volumes:
+  mongo_data:
