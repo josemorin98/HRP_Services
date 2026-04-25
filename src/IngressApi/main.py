@@ -46,12 +46,16 @@ async def generateObservatory(request: Request):
     start_time = time.time()
     try:
         config = await request.json()
+        print(f"JSON recibido: {config}")
     except Exception as e:
-        raise HTTPException(status_code=400, detail=f"Error leyendo el JSON recibido: {e}")
+        raise HTTPException(status_code=400, detail=f"Error leyendo el JSON recibido:\n {e}")
     print(f"Configuración recibida")
-    csv_path = config.get('csv_path')
+    observatory = config.get('observatory')
+    if not observatory:
+        raise HTTPException(status_code=400, detail="No se encontró 'observatory' en el JSON")
+    csv_path = observatory.get('csv_path')
     if not csv_path:
-        raise HTTPException(status_code=400, detail="No se encontró 'csv_path' en el JSON")
+        raise HTTPException(status_code=400, detail="No se encontró 'csv_path' en observatory")
 
     tiempo_lectura = time.time() - start_time
     print(f"Tiempo de lectura de confiugracion: {tiempo_lectura} segundos")
