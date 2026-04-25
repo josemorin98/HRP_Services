@@ -48,31 +48,4 @@
                 "params": [{"paramsLevel_1": {}}, {"paramsLevel_2": {}}, {"paramsLevel_3": {}}]
             }
         }
-}
-
-{
-    level_1 : {
-        split:"ENT_NAME(Country)",
-        products:[]
-    },
-    level_2 : {
-        split:"CAUSA_DEF(Indice)",
-        products:[{
-            "Product_Pie_Graph": {
-                "params": {"paramsLevel_2": []}
-            }
-        ]
-    },
-    level_3 : {
-        split:"CAUSE_DEF(C,X)",
-        products:[]
-    },
-    level_4 : {
-        split:"ENT_NAME",
-        products:[]
-    },
-    level_5 : {
-        split:"TYPE_TASA",
-        products:[]
     }
-}
