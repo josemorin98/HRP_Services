@@ -5,9 +5,9 @@
 
 
 # Con contenedores
-from Tools.loggerClass import FileLogger
-from Tools.utils import Utils
-from Tools.mongo_connection import MongoConnection
+from src.Tools.loggerClass import FileLogger
+from src.Tools.utils import Utils
+from src.Tools.mongo_connection import MongoConnection
 
 # Importar FastAPI y otros módulos necesarios
 from fastapi import FastAPI, HTTPException
@@ -20,11 +20,25 @@ import time
 import datetime
 import hashlib
 import uuid
+import json
 
 app = FastAPI()
 logger = FileLogger(log_dir='./test/logIngressAPI', log_name='ingressAPI')
 mongo = MongoConnection(db_name="tasks")
-    
+
+
+'''
+# Genera una matriz STORI y devuelve su resultado
+
+from Stori.stori_serv import generate_stori_matrix
+
+@app.post("/generateObservatory")
+def generate():
+    result = generate_stori_matrix("input_config.json")
+    return result
+
+# --------
+'''
 
 @app.get("/")
 def read_root():
@@ -40,20 +54,37 @@ async def get_cwd():
     cwd = os.getcwd()
     return {"cwd": cwd}
 
+import os
+print("CWD:", os.getcwd())
+print("FILES:", os.listdir())
+
+# ----- STORI -----
+
+#Importamos la función para generar la matriz STORI desde el servicio de Stori
+from src.Stori.stori_serv import generate_stori_matrix
 
 @app.post("/generateObservatory")
 async def generateObservatory(request: Request):
     start_time = time.time()
     try:
-        config = await request.json()
+        config = await request.json() #Convertimos el body a un diccionario de python
+        
+        # Extrae el contenido de "observatory" para acceder directamente a sus datos
+        if "observatory" in config:
+            config = config["observatory"]
+            
+        #Aqui genera la matriz STORI
+        stori_result = generate_stori_matrix(config)
+        
         print(f"JSON recibido: {config}")
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Error leyendo el JSON recibido:\n {e}")
     print(f"Configuración recibida")
-    observatory = config.get('observatory')
-    if not observatory:
-        raise HTTPException(status_code=400, detail="No se encontró 'observatory' en el JSON")
-    csv_path = observatory.get('csv_path')
+    #Este se documento porque ya no es necesario buscar observatory porque ya se saca anteriormente con la modificacion que se ralizo
+    #observatory = config.get('observatory')
+    #if not observatory:
+    #    raise HTTPException(status_code=400, detail="No se encontró 'observatory' en el JSON")
+    csv_path = config.get('csv_path')
     if not csv_path:
         raise HTTPException(status_code=400, detail="No se encontró 'csv_path' en observatory")
 
@@ -98,7 +129,7 @@ async def generateObservatory(request: Request):
 
         # -----------------------------------------------------------------------------------
         # Verificación de variable de observación
-        observation_vars = config.get('observationVariables', {})
+        observation_vars = config.get('observableVariables', {})
         observation_ok = Utils.verificar_variable_interes(df, observation_vars, logger)
         print(f"Resultado de verificación de observación: {observation_ok}")
 
@@ -133,7 +164,8 @@ async def generateObservatory(request: Request):
 
     logger.info(f"READ_CONFIG_TIME\t{tiempo_lectura}\tREAD_CSV_TIME\t{tiempo_lectura_csv}\tVERIFICATION_TIME\t{tiempo_verificacion}\tINSERTION_TIME\t{tiempo_insert}")
     responseContent = {"csv_preview": "OKOK",
-                       "id_task": taskid}
+                       "id_task": taskid,     
+                       "stori_matrix": stori_result} #---- modificacion 
     return JSONResponse(content=responseContent, status_code=200)
 
 

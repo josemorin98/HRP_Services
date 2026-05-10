@@ -13,13 +13,16 @@ RUN pip install -r requirements.txt
 # COPY ../Tools/   /app/src/Tools
 
 # # Ir directo a la carpeta de IngressApi
-# WORKDIR /app/src/IngressApi
+#WORKDIR /app/src/IngressApi
 
+#Modificacion para que docker detecte donde este el main.py a ejecutar
+ENV PYTHONPATH=/app
 
 # Exponer el puerto 8000
 EXPOSE 8000
 
 # Ejecutar main.py por defecto
 # CMD [ ""]
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+#Modifacion para que ejecute el main.py correcto
+CMD ["uvicorn", "src.IngressApi.main:app", "--host", "0.0.0.0", "--port", "8000"]
 

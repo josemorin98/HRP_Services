@@ -1,5 +1,6 @@
 import requests
 import json
+import csv # Para crear un csv de la matriz
 from pathlib import Path
 
 # URL del servicio al que quieres hacer la petición
@@ -23,3 +24,13 @@ try:
     print("Response JSON:", json.dumps(response.json(), indent=2, ensure_ascii=False))
 except ValueError:
     print("La respuesta no es JSON válido.")
+
+
+# Para crear un csv de la matriz
+
+data = response.json()["stori_matrix"]
+
+with open("stori_matrix_output.csv", "w", newline="") as f:
+    writer = csv.writer(f)
+    writer.writerow(["Spatial","Temporal","Observable","Relation","Interest"])
+    writer.writerows(data)

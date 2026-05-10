@@ -7,15 +7,14 @@
         "observableVariables": {
             "RawRatio100k": "TASA_100K"
             },
-        "intresVariables": {
+        "interestVariables": {
                 "Sex": "SEXO",
                 "Age": "RANGO_EDAD",
                 "DeathCause": "CAUSA_DEF"
             },
         "spatialVariables": {
-                "Country": "ENT_CVE(Total)",
-                "State": "ENT_CVE",
-                "City": "MUN_CVE"
+                "State": "ENT_NAME",
+                "City": "MUN_NAME"
             },
         "temporalVariables": {
                 "formatDate": "%Y",

@@ -15,8 +15,8 @@ services:
 
   ingressapi:
     build:
-      context: ./src/IngressApi
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: ./src/IngressApi/Dockerfile #Modificacion para que tome el Dockerfile correcto
     container_name: ingressapi
     restart: always
     ports:
@@ -26,7 +26,6 @@ services:
     environment:
       - PYTHONUNBUFFERED=1
     volumes:
-      - ./src/Tools:/app/Tools
       - ./data:/app/data
       - ./test:/app/test
 
