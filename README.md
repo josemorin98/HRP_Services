@@ -140,4 +140,5 @@ python3 test_scheduler.py
 ## 👨‍💻 Autor
 
 Encargado: Dr.José Carlos Morín García
+
 Becario: Jesús Eduardo Leal Gámez
