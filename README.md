@@ -101,7 +101,7 @@ cd HRP_Services
 docker compose up --build
 ```
 
-### Opcional (Detener el proyecto) 
+### Detener el proyecto
 ``` bash
 docker compose down
 ```
